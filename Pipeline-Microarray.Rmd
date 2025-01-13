@@ -1,0 +1,64 @@
+# Pipeline for Biomarker Discovery with Microarray Data
+
+------------------------------------------------------------------------
+
+## 1. Pre-Processing
+
+### 1.1 Load necessary libraries
+
+```{r}
+library(GEOquery)
+library(affy)
+library(dplyr)
+library(ggplot2)
+library(car)
+library(reshape2)        
+library(pheatmap)
+library(ggrepel)
+```
+
+### 1.2 Do some cleanup of already existing data from prior runs
+
+Since data is kept locally and expanded from compressed archives, starting anew makes this step necessary.
+
+```{r}
+source("./DeleteFiles.R")
+temp_d<-tempdir()
+DeleteFiles(tempdir(), c("\\.CEL$", "\\.CEL.gz$"))
+```
+
+### 1.3 Read the Microarray Data
+
+This includes GEO Series Metada as well as the expression data from the Affymetrix files.
+
+```{r}
+geods<-"GSE21942"
+tar<-paste(geods, "_RAW.tar", sep="")
+
+untar(tar, exdir=temp_d)
+gz_f<-list.files(temp_d, pattern="\\CEL.gz$", full.names=TRUE)
+cel_fs<-sapply(gz_f, function(f) {
+  R.utils::gunzip(f, remove=FALSE)
+})
+celfiles<-list.files(temp_d, pattern="\\.CEL$")
+affy_data<-ReadAffy(filenames=celfiles, celfile.path=temp_d)
+```
+
+### 1.4 Normalize and Extract the Expression Data
+```{r}
+norm_d<-rma(affy_data)
+expressions<-exprs(norm_d)
+```
+
+### 1.4 Visualize the Data
+
+This will give an impression about the quality of the data 
+```{r}
+boxplot(expressions)
+expr_melt<-melt(expressions)
+ggplot(expr_melt,aes(x=value, color=Var2)) +
+  geom_density() +
+  theme_minimal()
+hist(expressions)
+```
+
