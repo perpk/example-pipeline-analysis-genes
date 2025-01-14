@@ -34,10 +34,10 @@ ggplot(expr_melt,aes(x=value, color=Var2)) +
   theme_minimal()
 hist(expressions)
 
-raw_melt<-melt(raw_vals)
-ggplot(raw_melt,aes(x=value, color=Var2)) +
-  geom_density() +
-  theme_minimal()
+# raw_melt<-melt(raw_vals)
+# ggplot(raw_melt,aes(x=value, color=Var2)) +
+#  geom_density() +
+#  theme_minimal()
 
 gse<-getGEO(geods)
 eset<-gse[[1]]
@@ -46,10 +46,9 @@ pca_df<-as.data.frame(pca$x)
 pca_df$Group<-pData(eset)$`disease state:ch1`
 ggplot(pca_df, aes(x=PC1, y=PC2, color=Group, label=rownames(pca_df))) +
   geom_point(size=3) +
-  #geom_text(aes(label=rownames(pca_df), hjust=-0.3, vjust=0.3, size=3)) +
-  geom_text_repel(size=3)
-  theme_minimal() +
-  labs(title("PCA", x="PCA1", y="PCA2"))
+  geom_text_repel(size=3) +
+  theme_minimal() 
+  
 summary(pca)
 pca$sdev
 
