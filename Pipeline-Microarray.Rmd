@@ -22,6 +22,9 @@ library(car)
 library(reshape2)        
 library(pheatmap)
 library(ggrepel)
+
+source("./DeleteFiles.R")
+
 ```
 
 ### 1.2 Do some cleanup of already existing data from prior runs

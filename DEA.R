@@ -27,4 +27,5 @@ ggplot(results, aes(x=logFC, y=-log10(adj.P.Val))) +
 limma::plotMA(fit2, main="MA Plot", ylim=c(-5,5))
 abline(h = c(-1, 1), col = "blue", lty = 2)
 
-View(results)
+deg_df<-results[abs(results$logFC) >= 1 & results$adj.P.Val <= 0.05,]
+nrow(deg_df)

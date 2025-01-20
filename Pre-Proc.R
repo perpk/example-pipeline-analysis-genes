@@ -1,11 +1,11 @@
 library(GEOquery)
 library(affy)
-library(dplyr)
 library(ggplot2)
 library(car)
 library(reshape2)        
 library(pheatmap)
 library(ggrepel)
+library(tidyverse)
 
 source("./DeleteFiles.R")
 
@@ -25,7 +25,7 @@ affy_data<-ReadAffy(filenames=celfiles, celfile.path=temp_d)
 norm_d<-rma(affy_data)
 expressions<-exprs(norm_d)
 
-raw_vals<-exprs(affy_data)
+# raw_vals<-exprs(affy_data)
 
 boxplot(expressions)
 expr_melt<-melt(expressions)
